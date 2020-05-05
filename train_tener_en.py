@@ -27,7 +27,7 @@ if dataset == 'vlsp2016':
     num_layers = 2
     lr = 0.0009
     attn_type = 'adatrans'
-    char_type = 'lstm'
+    char_type = 'bilstm'
 elif dataset == 'en-ontonotes':
     n_heads =  8
     head_dims = 96
@@ -72,10 +72,14 @@ def load_data():
                  min_char_freq=2, requires_grad=True, include_word_start_end=False,
                  char_attn_type=char_type, char_n_head=3, char_dim_ffn=60, char_scale=char_type=='naive',
                  char_dropout=0.15, char_after_norm=True)
-    elif char_type == 'lstm':
+    elif char_type == 'bilstm':
         char_embed = LSTMCharEmbedding(vocab=data.get_vocab('words'), embed_size=30, char_emb_size=30, word_dropout=0,
                  dropout=0.3, hidden_size=100, pool_method='max', activation='relu',
                  min_char_freq=2, bidirectional=True, requires_grad=True, include_word_start_end=False)
+    elif char_type == 'lstm':
+        char_embed = LSTMCharEmbedding(vocab=data.get_vocab('words'), embed_size=30, char_emb_size=30, word_dropout=0,
+                 dropout=0.3, hidden_size=100, pool_method='max', activation='relu',
+                 min_char_freq=2, bidirectional=False, requires_grad=True, include_word_start_end=False)
     word_embed = StaticEmbedding(vocab=data.get_vocab('words'),
                                  model_dir_or_name='glove/',
                                  requires_grad=True, lower=True, word_dropout=0, dropout=0.5,
