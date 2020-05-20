@@ -8,10 +8,11 @@ from fastNLP.io.pipe.conll import OntoNotesNERPipe
 from fastNLP.embeddings import StaticEmbedding, StackEmbedding, LSTMCharEmbedding
 from modules.TransformerEmbedding import TransformerCharEmbed
 from modules.pipe import VLSP2016NERPipe
+from fastNLP.core import Vocabulary
 import torch
 import argparse
 from modules.callbacks import EvaluateCallback
-
+from fastNLP.core.batch import DataSetIter
 device = None
 parser = argparse.ArgumentParser()
 
@@ -50,11 +51,11 @@ dropout=0.15
 fc_dropout=0.4
 
 encoding_type = 'bioes'
-name = 'caches/{}_{}_{}_{}_{}.pkl'.format(dataset, model_type, encoding_type, char_type, normalize_embed)
+# name = 'caches/{}_{}_{}_{}_{}.pkl'.format(dataset, model_type, encoding_type, char_type, normalize_embed)
 d_model = n_heads * head_dims
 dim_feedforward = int(2 * d_model)
 
-@cache_results(name, _refresh=False)
+# @cache_results(name, _refresh=False)
 def load_data():
     if dataset == 'vlsp2016':
         paths = {'test': "./data_2/test.txt",
@@ -62,6 +63,9 @@ def load_data():
                  'dev': "./data_2/dev.txt"}
         data = VLSP2016NERPipe(encoding_type=encoding_type).process_from_file(paths)
     char_embed = None
+    # print("test: ", data.get_vocab('words'))
+    # print(data.get_vocab('words').to_index("The"))
+    # print(data.get_vocab('words').to_index("the"))
     if char_type == 'cnn':
         char_embed = CNNCharEmbedding(vocab=data.get_vocab('words'), embed_size=30, char_emb_size=30, filter_nums=[30],
                                       kernel_sizes=[3], word_dropout=0, dropout=0.3, pool_method='max'
@@ -85,12 +89,20 @@ def load_data():
     else:
         word_embed.word_drop = 0.02
         embed = word_embed
-
+    data__ = data.get_vocab('words')
     data.rename_field('words', 'chars')
-    return data, embed
+    return data, embed, data__, word_embed
 
-data_bundle, embed = load_data()
-# print(data_bundle.datasets)
+data_bundle, embed, data__, word_embed = load_data()
+
+# data__.add_word_lst(["alex_ferguson", "Alex_ferguson", "ALEX_FERGUSON"])
+# words = torch.LongTensor([[data__.to_index(word) for word in ["alex_ferguson", "Alex_ferguson", "ALEX_FERGUSON"]]])
+# for word in ["alex_ferguson", "Alex_ferguson", "ALEX_FERGUSON"]:
+#     print(data__.to_index(word))
+# print(words)
+# print(word_embed(words))
+
+# print(data_bundle.get_vocab('words'))
 model = TENER(tag_vocab=data_bundle.get_vocab('target'), embed=embed, num_layers=num_layers,
                        d_model=d_model, n_head=n_heads,
                        feedforward_dim=dim_feedforward, dropout=dropout,
@@ -103,7 +115,33 @@ model = TENER(tag_vocab=data_bundle.get_vocab('target'), embed=embed, num_layers
 model_path = 'models/best_TENER_lstm_glove'
 
 # model.load_state_dict('models/best_TENER_lstm_glove')
-# states = torch.load(model_path).state_dict()
-# model.load_state_dict(states)
-# a = embed("thuyen")
-# model.predict(a)
+states = torch.load(model_path).state_dict()
+model.load_state_dict(states)
+sampler = BucketSampler()
+sampler.set_batch_size(batch_size)
+
+from fastNLP.core.utils import _build_args
+sentence = "Đức học Đại_Học Bách_Khoa"
+chars = []
+for sen in sentence.split():
+    idx = data__.to_index(sen)
+    if idx == 1:
+        idx = data__.to_index(sen.lower())
+    print(idx)
+    chars.append(idx)
+
+seq_len = len(chars)
+target = [0]*seq_len
+
+import numpy as np
+
+target = torch.Tensor(np.array([target]))
+target = target.type(torch.LongTensor)
+seq_len = torch.Tensor(np.array([seq_len]))
+seq_len = seq_len.type(torch.LongTensor)
+chars = torch.Tensor(np.array([chars]))
+chars = chars.type(torch.LongTensor)
+
+z = dict({'target': target, 'seq_len': seq_len, 'chars': chars})
+x = _build_args(model.predict, **z)
+print(model.predict(**x))
