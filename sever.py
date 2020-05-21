@@ -7,9 +7,12 @@ from flask import jsonify
 # from pyvi import ViTokenizer
 from vncorenlp import VnCoreNLP
 import torch
+from flask_cors import CORS
+import json
 
 
 app = Flask(__name__)
+CORS(app)
 #thay đường dẫn đến VnCoreNLP-1.1.1.jar trước khi chạy
 annotator = VnCoreNLP("/home/duccao/VnCoreNLP/VnCoreNLP-1.1.1.jar", annotators="wseg", max_heap_size='-Xmx500m')
 inference = Inference()
@@ -65,6 +68,8 @@ def hello_world():
 def tener():
     text = request.get_data()
     text = text.decode('utf8')
+    _text = json.loads(text)
+    text = _text['text']
     print(text)
     # print(type(text))
     __text = annotator.tokenize(text)
