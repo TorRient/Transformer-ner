@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NLP_NER</title>
+    <link rel="stylesheet" href="demo.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="./axios.min.js"></script>
+    
+</head>
+<body>
+    <div class="bg">
+        <div class="box">
+            <header>Named Entity Recognition</header>
+            <div class="content">
+                <div class="label">
+                    Input
+                </div>
+                <div class="text-input">
+                    <!-- <textarea name="" id="" cols="30" rows="10"></textarea> -->
+                    <textarea name="input" class="input" id="input" rows="5" placeholder="Enter text to be analyzed..."></textarea>
+                    <!-- <textarea type="text" class="input"></textarea> -->
+                    <span class="focus-input100"></span>
+                </div>
+                
+            </div>
+            <button class="btn" id='btn-submit'>ANALYZE</button>
+            <button class="btn" id="btn-reset" style="display: none;">
+                <i class="material-icons">refresh</i>
+                <span>RESET</span>
+            </button>
+            
+            <div class="output">
+                <div class="label">
+                    Output
+                </div>
+                <div id="result"></div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="./demo.js"></script>
+</html>
