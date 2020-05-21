@@ -112,36 +112,68 @@ model = TENER(tag_vocab=data_bundle.get_vocab('target'), embed=embed, num_layers
                        pos_embed=pos_embed,
               scale=attn_type=='transformer')
 
-model_path = 'models/best_TENER_lstm_glove'
+# model_path = './best_TENER_lstm_glove'
 
-# model.load_state_dict('models/best_TENER_lstm_glove')
-states = torch.load(model_path).state_dict()
-model.load_state_dict(states)
-sampler = BucketSampler()
-sampler.set_batch_size(batch_size)
+# # model.load_state_dict('models/best_TENER_lstm_glove')
+# states = torch.load(model_path).state_dict()
+# model.load_state_dict(states)
+# sampler = BucketSampler()
+# sampler.set_batch_size(batch_size)
+
+
+class Inference:
+    def __init__(self):
+        self._get_model()
+        self.data = data__
+    def _get_model(self):
+        self.model = TENER(tag_vocab=data_bundle.get_vocab('target'), embed=embed, num_layers=num_layers,
+                        d_model=d_model, n_head=n_heads,
+                        feedforward_dim=dim_feedforward, dropout=dropout,
+                        after_norm=after_norm, attn_type=attn_type,
+                        bi_embed=None,
+                        fc_dropout=fc_dropout,
+                        pos_embed=pos_embed,
+                        scale=attn_type=='transformer')
+        model_path = './best_TENER_lstm_glove'
+        states = torch.load(model_path).state_dict()
+        self.model.load_state_dict(states)
+        sampler = BucketSampler()
+        sampler.set_batch_size(batch_size)
+
+inference = Inference()
+model = inference.model
 
 from fastNLP.core.utils import _build_args
-sentence = "Đức học Đại_Học Bách_Khoa"
-chars = []
-for sen in sentence.split():
-    idx = data__.to_index(sen)
-    if idx == 1:
-        idx = data__.to_index(sen.lower())
-    print(idx)
-    chars.append(idx)
+# sentence = "Đức học Đại_Học Bách_Khoa"
+# chars = []
+# for sen in sentence.split():
+#     idx = data__.to_index(sen)
+#     if idx == 1:
+#         idx = data__.to_index(sen.lower())
+#     print(idx)
+#     chars.append(idx)
 
-seq_len = len(chars)
-target = [0]*seq_len
+# seq_len = len(chars)
+# target = [0]*seq_len
 
-import numpy as np
+# import numpy as np
 
-target = torch.Tensor(np.array([target]))
-target = target.type(torch.LongTensor)
-seq_len = torch.Tensor(np.array([seq_len]))
-seq_len = seq_len.type(torch.LongTensor)
-chars = torch.Tensor(np.array([chars]))
-chars = chars.type(torch.LongTensor)
+# target = torch.Tensor(np.array([target]))
+# target = target.type(torch.LongTensor)
+# seq_len = torch.Tensor(np.array([seq_len]))
+# seq_len = seq_len.type(torch.LongTensor)
+# chars = torch.Tensor(np.array([chars]))
+# chars = chars.type(torch.LongTensor)
 
-z = dict({'target': target, 'seq_len': seq_len, 'chars': chars})
-x = _build_args(model.predict, **z)
-print(model.predict(**x))
+# z = dict({'target': target, 'seq_len': seq_len, 'chars': chars})
+# x = _build_args(model.predict, **z)
+# result = model.predict(**x)
+# print(result)
+# print(result['pred'][0])
+# for i in result['pred'][0]:
+#     print(type(i))
+
+# nx = result['pred'][0].numpy()
+# for n in nx:
+#     print(n)
+
