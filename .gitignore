@@ -1,2 +1,5 @@
 __pycache__
 best_TENER_lstm_glove
+modules/__pycache__
+models/__pycache__
+fastNLP/__pycache__
