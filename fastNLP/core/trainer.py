@@ -489,7 +489,6 @@ class Trainer(object):
         if isinstance(train_data, DataSet):
             self.data_iterator = DataSetIter(dataset=train_data, batch_size=batch_size, sampler=sampler,
                                              num_workers=num_workers, drop_last=drop_last)
-            print("XXXXXXXXXXX: ", self.data_iterator)
         elif isinstance(train_data, BatchIter):
             self.data_iterator = train_data
             train_data = train_data.dataset
@@ -657,10 +656,6 @@ class Trainer(object):
                 # early stopping
                 self.callback_manager.on_epoch_begin()
                 for batch_x, batch_y in self.data_iterator:
-                    # print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
-                    # print(batch_x)
-                    # print("YYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
-                    # print(batch_y)
                     self.step += 1
                     _move_dict_value_to_device(batch_x, batch_y, device=self._model_device)
                     indices = self.data_iterator.get_batch_indices()
@@ -753,8 +748,6 @@ class Trainer(object):
             self.optimizer.step()
 
     def _data_forward(self, network, x):
-        print(x)
-        exit()
         x = _build_args(self._forward_func, **x)
         y = network(**x)
         if not isinstance(y, dict):
