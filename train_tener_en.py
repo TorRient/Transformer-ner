@@ -12,7 +12,7 @@ from modules.pipe import VLSP2016NERPipe
 import argparse
 from modules.callbacks import EvaluateCallback
 
-device = None
+device = 0
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--dataset', type=str, default='vlsp2016')
@@ -49,7 +49,7 @@ normalize_embed = True
 dropout=0.15
 fc_dropout=0.4
 
-encoding_type = 'bioes'
+encoding_type = 'bio'
 name = 'caches/{}_{}_{}_{}_{}.pkl'.format(dataset, model_type, encoding_type, char_type, normalize_embed)
 d_model = n_heads * head_dims
 dim_feedforward = int(2 * d_model)
@@ -121,5 +121,5 @@ trainer = Trainer(data_bundle.get_dataset('train'), model, optimizer, batch_size
                   num_workers=2, n_epochs=100, dev_data=data_bundle.get_dataset('dev'),
                   metrics=SpanFPreRecMetric(tag_vocab=data_bundle.get_vocab('target'), encoding_type=encoding_type),
                   dev_batch_size=batch_size*5, callbacks=callbacks, device=device, test_use_tqdm=False,
-                  use_tqdm=True, print_every=300, save_path=None)
+                  use_tqdm=True, print_every=300, save_path="./outputs")
 trainer.train(load_best_model=False)
