@@ -20,12 +20,12 @@ model = inference.model
 data__ = inference.data
 dict_labels = {
     0: 'O',
-    1: 'B-LOC',
-    2: 'B-ORG',
-    3: 'I-LOC',
-    4: 'B-PER',
-    5: 'I-PER',
-    6: 'I-ORG',
+    1: 'B-PER',
+    2: 'B-LOC',
+    3: 'I-PER',
+    4: 'I-LOC',
+    5: 'I-ORG',
+    6: 'B-ORG',
     7: 'B-MISC',
     8: 'I-MISC'
 }
