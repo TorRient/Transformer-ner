@@ -29,13 +29,6 @@ if dataset == 'vlsp2016':
     lr = 0.0009
     attn_type = 'adatrans'
     char_type = 'bilstm'
-elif dataset == 'en-ontonotes':
-    n_heads =  8
-    head_dims = 96
-    num_layers = 2
-    lr = 0.0007
-    attn_type = 'adatrans'
-    char_type = 'adatrans'
 
 pos_embed = None
 
@@ -63,9 +56,6 @@ def load_data():
                  'dev': "./data_2/dev.txt"}
         data = VLSP2016NERPipe(encoding_type=encoding_type).process_from_file(paths)
     char_embed = None
-    # print("test: ", data.get_vocab('words'))
-    # print(data.get_vocab('words').to_index("The"))
-    # print(data.get_vocab('words').to_index("the"))
     if char_type == 'cnn':
         char_embed = CNNCharEmbedding(vocab=data.get_vocab('words'), embed_size=30, char_emb_size=30, filter_nums=[30],
                                       kernel_sizes=[3], word_dropout=0, dropout=0.3, pool_method='max'
