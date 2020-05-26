@@ -28,7 +28,7 @@ if dataset == 'vlsp2016':
     num_layers = 6
     lr = 0.0009
     attn_type = 'adatrans'
-    char_type = 'lstm'
+    char_type = 'bilstm'
 elif dataset == 'en-ontonotes':
     n_heads =  8
     head_dims = 96
