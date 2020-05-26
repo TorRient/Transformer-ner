@@ -80,8 +80,8 @@ def load_data():
         char_embed = LSTMCharEmbedding(vocab=data.get_vocab('words'), embed_size=30, char_emb_size=30, word_dropout=0,
                  dropout=0.3, hidden_size=100, pool_method='max', activation='relu',
                  min_char_freq=2, bidirectional=False, requires_grad=True, include_word_start_end=False)
-    word_embed = StaticEmbedding(vocab=data.get_vocab('words'),
-                                 model_dir_or_name='glove/',
+    word_embed = StaticEmbedding(vocab=data.get_vocab('words'), first_dim=10000,
+                                 model_dir_or_name=None, embedding_dim=300,
                                  requires_grad=True, lower=True, word_dropout=0, dropout=0.5,
                                  only_norm_found_vector=normalize_embed)
     if char_embed is not None:

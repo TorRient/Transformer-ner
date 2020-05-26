@@ -14,7 +14,7 @@ import json
 app = Flask(__name__)
 CORS(app)
 #thay đường dẫn đến VnCoreNLP-1.1.1.jar trước khi chạy
-annotator = VnCoreNLP("/home/duccao/VnCoreNLP/VnCoreNLP-1.1.1.jar", annotators="wseg", max_heap_size='-Xmx500m')
+annotator = VnCoreNLP("./VnCoreNLP/VnCoreNLP-1.1.1.jar", annotators="wseg", max_heap_size='-Xmx500m')
 inference = Inference()
 model = inference.model
 data__ = inference.data

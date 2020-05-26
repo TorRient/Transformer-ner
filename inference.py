@@ -18,7 +18,7 @@ device = None
 dataset ='vlsp2016'
 n_heads = 14
 head_dims = 128
-num_layers = 6
+num_layers = 2
 lr = 0.0009
 attn_type = 'adatrans'
 char_type = 'bilstm'
@@ -41,7 +41,7 @@ name = 'caches/{}_{}_{}_{}_{}.pkl'.format(dataset, model_type, encoding_type, ch
 d_model = n_heads * head_dims
 dim_feedforward = int(2 * d_model)
 
-@cache_results(name, _refresh=False)
+# @cache_results(name, _refresh=False)
 def load_data():
     if dataset == 'vlsp2016':
         paths = {'test': "./data_2/test.txt",
@@ -64,7 +64,7 @@ def load_data():
                  dropout=0.3, hidden_size=100, pool_method='max', activation='relu',
                  min_char_freq=2, bidirectional=True, requires_grad=True, include_word_start_end=False)
     word_embed = StaticEmbedding(vocab=data.get_vocab('words'),
-                                 model_dir_or_name='word2vec/',
+                                 model_dir_or_name='glove/',
                                  requires_grad=True, lower=True, word_dropout=0, dropout=0.5,
                                  only_norm_found_vector=normalize_embed)
     if char_embed is not None:
@@ -93,7 +93,7 @@ class Inference:
                         pos_embed=pos_embed,
                         scale=attn_type=='transformer')
         #Thay model path trước khi chạy
-        model_path = './num6_f874891_p891536_r858856'
+        model_path = './n14_h128_num2_f888483_p884806_r89219'
         states = torch.load(model_path).state_dict()
         self.model.load_state_dict(states)
         sampler = BucketSampler()

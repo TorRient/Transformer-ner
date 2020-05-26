@@ -5,3 +5,4 @@ models/__pycache__
 fastNLP/__pycache__
 caches/
 word2vec/
+VnCoreNLP/
