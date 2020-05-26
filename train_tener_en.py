@@ -12,7 +12,7 @@ from modules.pipe import VLSP2016NERPipe
 import argparse
 from modules.callbacks import EvaluateCallback
 
-device = 0
+device = None
 parser = argparse.ArgumentParser()
 
 parser.add_argument('--dataset', type=str, default='vlsp2016')

@@ -25,7 +25,7 @@ dataset = args.dataset
 if dataset == 'vlsp2016':
     n_heads = 14
     head_dims = 128
-    num_layers = 2
+    num_layers = 6
     lr = 0.0009
     attn_type = 'adatrans'
     char_type = 'lstm'
@@ -50,7 +50,7 @@ normalize_embed = True
 dropout=0.15
 fc_dropout=0.4
 
-encoding_type = 'bioes'
+encoding_type = 'bio'
 # name = 'caches/{}_{}_{}_{}_{}.pkl'.format(dataset, model_type, encoding_type, char_type, normalize_embed)
 d_model = n_heads * head_dims
 dim_feedforward = int(2 * d_model)
@@ -81,7 +81,7 @@ def load_data():
                  dropout=0.3, hidden_size=100, pool_method='max', activation='relu',
                  min_char_freq=2, bidirectional=True, requires_grad=True, include_word_start_end=False)
     word_embed = StaticEmbedding(vocab=data.get_vocab('words'),
-                                 model_dir_or_name='glove/',
+                                 model_dir_or_name='word2vec/',
                                  requires_grad=True, lower=True, word_dropout=0, dropout=0.5,
                                  only_norm_found_vector=normalize_embed)
     if char_embed is not None:
