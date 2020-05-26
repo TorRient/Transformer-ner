@@ -51,11 +51,11 @@ dropout=0.15
 fc_dropout=0.4
 
 encoding_type = 'bio'
-# name = 'caches/{}_{}_{}_{}_{}.pkl'.format(dataset, model_type, encoding_type, char_type, normalize_embed)
+name = 'caches/{}_{}_{}_{}_{}.pkl'.format(dataset, model_type, encoding_type, char_type, normalize_embed)
 d_model = n_heads * head_dims
 dim_feedforward = int(2 * d_model)
 
-# @cache_results(name, _refresh=False)
+@cache_results(name, _refresh=False)
 def load_data():
     if dataset == 'vlsp2016':
         paths = {'test': "./data_2/test.txt",
@@ -76,7 +76,7 @@ def load_data():
                  min_char_freq=2, requires_grad=True, include_word_start_end=False,
                  char_attn_type=char_type, char_n_head=3, char_dim_ffn=60, char_scale=char_type=='naive',
                  char_dropout=0.15, char_after_norm=True)
-    elif char_type == 'lstm':
+    elif char_type == 'bilstm':
         char_embed = LSTMCharEmbedding(vocab=data.get_vocab('words'), embed_size=30, char_emb_size=30, word_dropout=0,
                  dropout=0.3, hidden_size=100, pool_method='max', activation='relu',
                  min_char_freq=2, bidirectional=True, requires_grad=True, include_word_start_end=False)
