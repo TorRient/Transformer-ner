@@ -70,7 +70,7 @@ class StaticEmbedding(TokenEmbedding):
 
     """
     
-    def __init__(self, vocab: Vocabulary, fisrt_dim=10000, model_dir_or_name: str = 'en', embedding_dim=-1, requires_grad: bool = True,
+    def __init__(self, vocab: Vocabulary, first_dim=10000, model_dir_or_name: str = 'en', embedding_dim=-1, requires_grad: bool = True,
                  init_method=None, lower=False, dropout=0, word_dropout=0, normalize=False, min_freq=1, **kwargs):
         r"""
         
@@ -161,14 +161,14 @@ class StaticEmbedding(TokenEmbedding):
             if model_path:
                 embedding = self._load_with_vocab(model_path, vocab=lowered_vocab, init_method=init_method)
             else:
-                embedding = self._randomly_init_embed(fisrt_dim, embedding_dim, init_method)
-                self.register_buffer('words_to_words', torch.arange(fisrt_dim).long())
+                embedding = self._randomly_init_embed(len(vocab), embedding_dim, init_method)
+                self.register_buffer('words_to_words', torch.arange(len(vocab)).long())
             if lowered_vocab.unknown:
                 unknown_idx = lowered_vocab.unknown_idx
             else:
                 unknown_idx = embedding.size(0) - 1  # 否则是最后一个为unknow
-                self.register_buffer('words_to_words', torch.arange(fisrt_dim).long())
-            words_to_words = torch.full((fisrt_dim,), fill_value=unknown_idx).long()
+                self.register_buffer('words_to_words', torch.arange(len(vocab)).long())
+            words_to_words = torch.full((len(vocab),), fill_value=unknown_idx).long()
             for word, index in vocab:
                 if word not in lowered_vocab:
                     word = word.lower()
@@ -181,8 +181,8 @@ class StaticEmbedding(TokenEmbedding):
             if model_path:
                 embedding = self._load_with_vocab(model_path, vocab=vocab, init_method=init_method)
             else:
-                embedding = self._randomly_init_embed(fisrt_dim, embedding_dim, init_method)
-                self.register_buffer('words_to_words', torch.arange(fisrt_dim).long())
+                embedding = self._randomly_init_embed(first_dim, embedding_dim, init_method)
+                self.register_buffer('words_to_words', torch.arange(len(vocab)).long())
         if not self.only_norm_found_vector and normalize:
             embedding /= (torch.norm(embedding, dim=1, keepdim=True) + 1e-12)
         
