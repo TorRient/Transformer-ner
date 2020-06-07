@@ -337,7 +337,8 @@ def cache_results(_cache_fp, _refresh=False, _verbose=1):
                     with open(cache_filepath, 'rb') as f:
                         results = _pickle.load(f)
                     if verbose == 1:
-                        logger.info("Read cache from {}.".format(cache_filepath))
+                        # logger.info("Read cache from {}.".format(cache_filepath))
+                        pass
                     refresh_flag = False
 
             if refresh_flag:

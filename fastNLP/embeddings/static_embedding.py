@@ -70,7 +70,7 @@ class StaticEmbedding(TokenEmbedding):
 
     """
     
-    def __init__(self, vocab: Vocabulary, first_dim=10000, model_dir_or_name: str = 'en', embedding_dim=-1, requires_grad: bool = True,
+    def __init__(self, vocab: Vocabulary, model_dir_or_name: str = 'en', embedding_dim=-1, requires_grad: bool = True,
                  init_method=None, lower=False, dropout=0, word_dropout=0, normalize=False, min_freq=1, **kwargs):
         r"""
         
@@ -181,7 +181,7 @@ class StaticEmbedding(TokenEmbedding):
             if model_path:
                 embedding = self._load_with_vocab(model_path, vocab=vocab, init_method=init_method)
             else:
-                embedding = self._randomly_init_embed(first_dim, embedding_dim, init_method)
+                embedding = self._randomly_init_embed(20000, embedding_dim, init_method)
                 self.register_buffer('words_to_words', torch.arange(len(vocab)).long())
         if not self.only_norm_found_vector and normalize:
             embedding /= (torch.norm(embedding, dim=1, keepdim=True) + 1e-12)

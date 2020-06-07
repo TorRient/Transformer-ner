@@ -136,6 +136,7 @@ class BatchIter:
 
         # DataLoader的collate_fn输入是List[]，里面的元素是dataset[index]返回的结果
         if collate_fn is None:
+            print("TTTTTTTTTTTTTTT")
             # pytoch <= 1.1 中不能设置collate_fn=None
             self.dataiter = torch.utils.data.DataLoader(
                 dataset=dataset, batch_size=batch_size, sampler=self.sampler,
@@ -144,13 +145,14 @@ class BatchIter:
                 timeout=timeout, worker_init_fn=worker_init_fn,
                 batch_sampler=batch_sampler)
         else:
+            print("SSSSSSSSSSSSSS")
             self.dataiter = torch.utils.data.DataLoader(
                 dataset=dataset, batch_size=batch_size, sampler=self.sampler,
                 collate_fn=collate_fn, num_workers=num_workers,
                 pin_memory=pin_memory, drop_last=drop_last,
                 timeout=timeout, worker_init_fn=worker_init_fn,
                 batch_sampler=batch_sampler)
-
+                
         # 以sampler的数量为准，因为DistributedSampler的时候每个进程上并不是所有的数据都用上了
         if self.batch_sampler is None:
             self._num_batches = self.get_num_batches(len(self.dataiter.sampler), batch_size, drop_last)

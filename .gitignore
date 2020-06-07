@@ -6,3 +6,9 @@ fastNLP/__pycache__
 caches/
 word2vec/
 VnCoreNLP/
+model/
+glove/
+data/
+data_2/
+.vscode/
+vocab.txt

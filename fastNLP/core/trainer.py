@@ -656,6 +656,9 @@ class Trainer(object):
                 # early stopping
                 self.callback_manager.on_epoch_begin()
                 for batch_x, batch_y in self.data_iterator:
+                    print(batch_x)
+                    print(batch_y)
+                    exit()
                     self.step += 1
                     _move_dict_value_to_device(batch_x, batch_y, device=self._model_device)
                     indices = self.data_iterator.get_batch_indices()
